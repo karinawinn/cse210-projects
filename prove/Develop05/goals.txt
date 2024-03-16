@@ -1,0 +1,4 @@
+130,1,70
+SimpleGoal:Finish resume,Put finishing touches on job resume.,50,yes
+EternalGoal:Study scriptures,Study the scriptures 10 minutes per day.,25
+ChecklistGoal:Apply to internships,Send applications for different internship opportunities.,40,100,10,2
