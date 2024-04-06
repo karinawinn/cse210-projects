@@ -3,7 +3,7 @@ class AdiabaticDensity : Trajectory {
     public AdiabaticDensity(double[] startPosition,double startVelocity,double launchAngle,double mass,double rho,double A,double C,double temperature) : base(startPosition,startVelocity,launchAngle,rho,mass,A,C) {
         this.xposition = [startPosition[0]];
         this.yposition = [startPosition[1]];
-        this.launchAngle = launchAngle;
+        this.launchAngle = launchAngle * Math.PI/180;
         this.xvelocity = [startVelocity*Math.Cos(launchAngle)];
         this.yvelocity = [startVelocity*Math.Sin(launchAngle)];
         this.mass = mass;
@@ -29,7 +29,7 @@ class AdiabaticDensity : Trajectory {
         double currentrho = rho*Math.Pow(1 - a*r[1]/temperature,alpha);
         double xderiv = v[0];
         double yderiv = v[1]; 
-        double vxderiv = 0 - 0.5*(currentrho/rho)*A*C*v[0]*velocity/mass;
+        double vxderiv = 0 - 0.5*rho*A*C*v[0]*velocity/mass;
         double vyderiv = -9.8 - 0.5*(currentrho/rho)*A*C*v[1]*velocity/mass;
         return [xderiv, yderiv, vxderiv, vyderiv];
     }

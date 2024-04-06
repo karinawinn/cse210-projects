@@ -16,7 +16,7 @@ class Trajectory {
     public Trajectory(double[] startPosition, double startVelocity, double launchAngle, double mass, double rho, double A, double C) {
         this.xposition = [startPosition[0]];
         this.yposition = [startPosition[1]];
-        this.launchAngle = launchAngle;
+        this.launchAngle = launchAngle * Math.PI/180;
         this.xvelocity = [startVelocity*Math.Cos(launchAngle)];
         this.yvelocity = [startVelocity*Math.Sin(launchAngle)];
         this.mass = mass;
@@ -31,7 +31,7 @@ class Trajectory {
             if (i < 2) {
                 r = r.Append(vars[i]).ToArray();
             }
-            if (i > 2) {
+            if (i >= 2) {
                 v = v.Append(vars[i]).ToArray();
             }
         }
@@ -44,7 +44,7 @@ class Trajectory {
         return [xderiv, yderiv, vxderiv, vyderiv];
     }
     public virtual double[] RK4Step() {
-        double dt = 2;
+        double dt = 0.01;
         double[] vars1 = [xposition[^1],yposition[^1],xvelocity[^1],yvelocity[^1]];
         double[] deriv1 = Derivatives(vars1);
         double[] vars2 = [];
@@ -72,10 +72,14 @@ class Trajectory {
         for (int i = 0; i < 4; i++ ) {
             k4 = k4.Append(dt * deriv4[i]).ToArray();
         }
+        double[] vars5 = [];
         for (int i = 0; i < 4; i++ ) {
-            vars1[i] += 1/6 * (k1[i] + (2 * k2[i]) + (2 * k3[i]) + k4[i]);
+            double start = vars1[i];
+            double add = (double)0.16666666667 * (k1[i] + (2 * k2[i]) + (2 * k3[i]) + k4[i]);
+            double value = start + add;
+            vars5 = vars5.Append(value).ToArray();
         }
-        return vars1;
+        return vars5;
     }
     public virtual (double[],double[]) CalcTrajectory() {
         while (yposition[^1] >= 0) {
@@ -86,25 +90,5 @@ class Trajectory {
             yvelocity = yvelocity.Append(variables[3]).ToArray();
         }
         return (xposition,yposition);
-    }
-    public void GraphTrajectory() {
-
-    }
-    public double GetRange() {
-        double range = xposition[^1];
-        return range;
-    }
-    public double GetMaxHeight() {
-        double max = 0;
-        for (int i = 0; i < yposition.Length; i++) {
-            if (i % 2 == 0) {
-                double y = yposition[i+1];
-                if (y > max) {
-                    max = y;
-                }
-            }
-        }
-        double maxHeight = max;
-        return maxHeight;
     }
 }

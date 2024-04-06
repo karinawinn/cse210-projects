@@ -4,7 +4,7 @@ class HeadwindTailwind : Trajectory {
     public HeadwindTailwind(double[] startPosition, double startVelocity, double launchAngle, double mass, double rho, double A, double C, double headwind,double tailwind) : base (startPosition,startVelocity,launchAngle,mass,rho,A,C) {
         this.xposition = [startPosition[0]];
         this.yposition = [startPosition[1]];
-        this.launchAngle = launchAngle;
+        this.launchAngle = launchAngle * Math.PI/180;
         this.xvelocity = [startVelocity*Math.Cos(launchAngle)];
         this.yvelocity = [startVelocity*Math.Sin(launchAngle)];
         this.mass = mass;
@@ -15,7 +15,7 @@ class HeadwindTailwind : Trajectory {
         this.tailwind = tailwind;    
     }
     public override double[] RK4Step() {
-        double dt = 2;
+        double dt = 0.01;
         double[] vars1 = [xposition[^1],yposition[^1],xvelocity[^1] - headwind + tailwind,yvelocity[^1]];
         double[] deriv1 = Derivatives(vars1);
         double[] vars2 = [];
@@ -43,9 +43,13 @@ class HeadwindTailwind : Trajectory {
         for (int i = 0; i < 4; i++ ) {
             k4 = k4.Append(dt * deriv4[i]).ToArray();
         }
+        double[] vars5 = [];
         for (int i = 0; i < 4; i++ ) {
-            vars1[i] += 1/6 * (k1[i] + (2 * k2[i]) + (2 * k3[i]) + k4[i]);
+            double start = vars1[i];
+            double add = (double)0.16666666667 * (k1[i] + (2 * k2[i]) + (2 * k3[i]) + k4[i]);
+            double value = start + add;
+            vars5 = vars5.Append(value).ToArray();
         }
-        return vars1;
+        return vars5;
     }
 }
