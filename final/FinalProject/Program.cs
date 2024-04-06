@@ -13,17 +13,17 @@ class Program
         Console.Write("What type of projectile motion would you like to model?");
         int response = int.Parse(Console.ReadLine());
 
-        Console.Write("Starting Position (x,y):");
+        Console.Write("Starting Position (m) in the form of x,y,z: Only enter z if the Magnus Force is included. ");
         string p = Console.ReadLine();
         string[] pos = p.Split(",");
         double[] position = [(double)float.Parse(pos[0]),(double)float.Parse(pos[1])];
-        Console.Write("Starting Velocity:");
+        Console.Write("Starting Velocity (m/s):");
         double velocity = (double)float.Parse(Console.ReadLine());
-        Console.Write("Launch Angle:");
+        Console.Write("Launch Angle (degrees):");
         double angle = (double)float.Parse(Console.ReadLine());
-        Console.Write("Mass:");
+        Console.Write("Mass (kg):");
         double mass = (double)float.Parse(Console.ReadLine());
-        Console.Write("Air Density:");
+        Console.Write("Air Density (kg/m^3):");
         double density = (double)float.Parse(Console.ReadLine());
         Console.Write("Cross Sectional Area:");
         double A = (double)float.Parse(Console.ReadLine());
@@ -53,7 +53,7 @@ class Program
             results = model3.CalcTrajectory();
         }
         else if (response == 4) {
-            Console.Write("Viscous Drag Coefficient:");
+            Console.Write("Viscous Drag Coefficient (not including air resistance):");
             double B1 = (double)float.Parse(Console.ReadLine());
             Console.Write("Collisional Drag Coefficient:");
             double B2 = (double)float.Parse(Console.ReadLine());
